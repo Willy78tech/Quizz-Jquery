@@ -1,0 +1,44 @@
+{
+    "Questions" : [
+        {
+            "question": "1) À quoi sert un aria-label ?",
+            "option1": "Ajouter du contenu textuel sur une balise pour aider les lecteurs d'écran",
+            "option2": "À rien", 
+            "option3": "Je ne sais pas",
+            "option4": "Toutes ces réponses", 
+            "answer": "Ajouter du contenu textuel sur une balise pour aider les lecteurs d'écran"
+        },
+        {
+            "question": "2) HTML vient de :",
+            "option1": "Hyper Typo Meta Lol",
+            "option2":	"Hypertext markup language", 
+            "option3":	"Je ne sais pas",
+            "option4": "Toutes ces réponses",
+            "answer": "Hypertext markup language"
+        },
+        {
+            "question": "3) Qui est le créateur de HTML ?",
+            "option1": "Microsoft",
+            "option2": "Google",
+            "option3": "Apple",
+            "option4": "Toutes ces réponses",
+            "answer": "Microsoft"
+        },
+        {
+            "question": "4) Qui est le créateur de CSS ?",
+            "option1": "Microsoft",
+            "option2": "Google",
+            "option3": "Apple",
+            "option4": "Toutes ces réponses",
+            "answer": "Microsoft"
+        },
+        {
+            "question": "5) Qui est le créateur de JS ?",
+            "option1": "Microsoft",
+            "option2": "Google",
+            "option3": "Apple",
+            "option4": "Toutes ces réponses",
+            "answer": "Microsoft"
+        }
+    ]
+}

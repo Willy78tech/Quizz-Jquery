@@ -10857,4 +10857,16 @@ a.text-dark:hover, a.text-dark:focus {
 .error {
   color: #dc3545;
 }
+
+.identity {
+  color: #007bff;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.identity span {
+  color: #000;
+  text-transform: none;
+  font-weight: normal;
+}
 /*# sourceMappingURL=style.css.map */

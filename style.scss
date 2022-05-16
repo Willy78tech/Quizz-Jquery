@@ -1,5 +1,17 @@
+
 @import './node_modules/bootstrap/scss/bootstrap.scss';
 
 .error {
     color: $danger;
+}
+
+.identity {
+    color: $primary;
+    font-weight: bold;
+    text-transform: uppercase;
+    & span {
+        color: $black;
+        text-transform: none;
+        font-weight: normal;
+    }
 }

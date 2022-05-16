@@ -6,7 +6,7 @@ var answer = [];
 var count = 0;
 
 
-$(document).ready(function () {
+
 
     $("#formulaire").validate(
         {
@@ -46,22 +46,7 @@ $(document).ready(function () {
                 }
             },
             submitHandler: function () {
-                 
-            // sauvegarder les données du formulaire
-                estSoumis = true;
-                profil = {
-                    nom: $("#fname").val(),
-                    prenom: $("#lname").val(),
-                    date: $("#date").val(),
-                    statut: $("#statut").select()
-                };
-                // afficher le profil dans la div identity
-                $("#identity").html(
-                    "<p>Nom: " + profil.nom + "</p>" +
-                    "<p>Prénom: " + profil.prenom + "</p>" +
-                    "<p>Date de naissance: " + profil.date + "</p>" +
-                    "<p>Statut: " + profil.statut + "</p>"
-                );
+                
             }, 
             showErrors: function (errorMap, errorList) {
                 if (estSoumis) {
@@ -76,6 +61,7 @@ $(document).ready(function () {
             },
             invalidHandler: function (form, validator) {
                 estSoumis = true;
+                
             },
         }
     );
@@ -90,14 +76,38 @@ $(document).ready(function () {
     );
 
 
-
 //.................................... Quizz ..........................................
 
+$(document).ready(function () {
 
+    $('#acceder').click(function(){
+        // calcul de l'age avant d'envoyer au localstorage
+        const dateNaissance = new Date($('#date').val());
+        const dateActuelle = new Date();
+        let age = dateActuelle.getFullYear() - dateNaissance.getFullYear();
+        const mois = dateActuelle.getMonth() - dateNaissance.getMonth();
+        const jour = dateActuelle.getDate() - dateNaissance.getDate();
+        if (mois < 0 || (mois === 0 && jour < 0)) {
+            age--;
+        }
 
-    
+        // enregistrement des données dans le localstorage
+        localStorage.setItem('nom', $('#fname').val());
+        localStorage.setItem('prenom', $('#lname').val());
+        localStorage.setItem('age', age);
+        localStorage.setItem('statut', $('#statut').val());
+        localStorage.setItem('date', $('#date').val());
 
-
+        
+        /* // envoi de l'age au localstorage
+        localStorage.setItem('age', age);
+        // sauvegarder les données du formulaire dans le local storage
+        localStorage.setItem('fname', $('#fname').val());
+        localStorage.setItem('lname', $('#lname').val());
+        /* localStorage.setItem('date', $('#date').val());
+        localStorage.setItem('statut', $('#statut').val()); */ 
+        
+    });
 
     // fonction bouton quizz
     function buttonQuizz(){
@@ -158,7 +168,7 @@ $(document).ready(function () {
                 $('#badResponse').append(`<p>Correction : <span class="text-success">${data.Questions[i].answer}</span></p>`);    
             }
         }
-        $('quizz').hide();
+        /* $('quizz').hide(); */
         $("#marque").text(marque);
         $("#correct-answer").text(Number(marque) / 2);
         $('#percentage').text((Number(marque) / 10) * 100) + "%";
@@ -201,7 +211,6 @@ $(document).ready(function () {
                 $(".option").removeClass("active");
                 buttonQuizz();
                 selectedAnswer();
-                progressbar();
             }
         });
 
@@ -212,7 +221,6 @@ $(document).ready(function () {
             afficherQuestion(data.Questions, count);
             buttonQuizz();
             selectedAnswer();
-            progressbar();
         });
 
         // Fin du quizz
@@ -222,8 +230,31 @@ $(document).ready(function () {
                 alert("Vous devez sélectionner au moins 1 réponse");
             }
             else {
+                // afficher les données du formulaire dans la div info
+                $('#nom').append(`${localStorage.getItem('fname')}`);
+                $('#prenom').append(`${localStorage.getItem('lname')}`);
+                $('#age').append(`${localStorage.getItem('age')}`);
+                $('#etat').append(`${localStorage.getItem('statut')}`);
+        
+                $('#result').show();
                 afficherResultat(data);
-
+                if (marque > 7) {
+                    // alerte bootstrap de succès
+                    $('#result').append(`<div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">Bravo !</h4>
+                    <p>Vous avez réussi le quizz !</p>    
+                    </div>`);
+                } else if (marque === 6 && marque < 7) {
+                    $('#result').append(`<div class="alert alert-warning" role="alert">
+                    <h4 class="alert-heading">Encore un effort !</h4>
+                    <p>Vous êtes sur la bonne voie pour réussir le quizz !</p>
+                    </div>`);
+                } else if (marque < 6) {
+                    $('#result').append(`<div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Echec !</h4>
+                    <p>Vous n'avez pas réussi le quizz !</p>    
+                    </div>`);
+                }
             }
         });
     });

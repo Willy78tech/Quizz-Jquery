@@ -173,7 +173,7 @@ $(function () {
                 marque += 2;
         // mettre les questions et reponses dans un accordeon 
                 $('#accordion').append(`<div class="card">
-                <div class="card-header" id="heading${i}">
+                <div class="card-header bg-warning" id="heading${i}">
                     <h6 class="mb-0">
                         <button class="btn btn-link btn-block text-left text-decoration-none text-dark font-weight-bold" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="true" aria-controls="collapse${i}">
                         <p>${data.Questions[i].question}</p>
@@ -201,7 +201,7 @@ $(function () {
             else if (answer[i] !== data.Questions[i].answer) {
                 // mettre les questions et reponses dans un accordeon
                 $('#accordion').append(`<div class="card">
-                <div class="card-header" id="heading${i}">
+                <div class="card-header bg-warning" id="heading${i}">
                     <h6 class="mb-0">
                         <button class="btn btn-link btn-block text-left text-decoration-none text-dark font-weight-bold" type="button" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="true" aria-controls="collapse${i}">
                         <p>${data.Questions[i].question}</p>

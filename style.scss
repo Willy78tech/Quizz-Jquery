@@ -1,17 +1,49 @@
 
 @import './node_modules/bootstrap/scss/bootstrap.scss';
 
+body {
+    overflow-x: hidden; 
+    background-image: url("./public/IMG/blackorange.jpg");
+ }
+
 .error {
     color: $danger;
 }
 
 .identity {
-    color: $primary;
+    color: $warning;
     font-weight: bold;
     text-transform: uppercase;
     & span {
-        color: $black;
+        color: $white;
         text-transform: none;
         font-weight: normal;
     }
 }
+
+hr {
+    background-color: $warning;
+}
+
+
+/* Classes invisibles du data Table de Jquery */
+.dataTables_empty,
+.paging_simple_numbers,
+#myTable_filter > label,
+#myTable_length > label,
+#myTable_lengh > label,
+#myTable label,
+.dataTables_info,
+.paginate_button.previous.disabled,
+.paginate_button.next.disabled  {
+    display: none;
+}
+
+tbody:nth-child(odd) {
+    background-color: rgb(76, 76, 75);
+}
+
+tbody:nth-child(even) {
+    background-color: rgb(104, 104, 104);
+}
+

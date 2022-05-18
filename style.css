@@ -10854,19 +10854,49 @@ a.text-dark:hover, a.text-dark:focus {
   }
 }
 
+body {
+  overflow-x: hidden;
+  background-image: url("./public/IMG/blackorange.jpg");
+}
+
 .error {
   color: #dc3545;
 }
 
 .identity {
-  color: #007bff;
+  color: #ffc107;
   font-weight: bold;
   text-transform: uppercase;
 }
 
 .identity span {
-  color: #000;
+  color: #fff;
   text-transform: none;
   font-weight: normal;
+}
+
+hr {
+  background-color: #ffc107;
+}
+
+/* Classes invisibles du data Table de Jquery */
+.dataTables_empty,
+.paging_simple_numbers,
+#myTable_filter > label,
+#myTable_length > label,
+#myTable_lengh > label,
+#myTable label,
+.dataTables_info,
+.paginate_button.previous.disabled,
+.paginate_button.next.disabled {
+  display: none;
+}
+
+tbody:nth-child(odd) {
+  background-color: #4c4c4b;
+}
+
+tbody:nth-child(even) {
+  background-color: #686868;
 }
 /*# sourceMappingURL=style.css.map */

@@ -6,7 +6,17 @@ var answer = [];
 var count = 0;
 
 
+$(function () {
 
+    
+    $('#quizz').hide();
+    $('#start_page').hide();
+    $('#dialog').hide();
+    $('#myTable').hide();
+    $('#accordion').hide();
+    $('#info').hide();
+    $('.fin').hide();
+    
 
     $("#formulaire").validate(
         {
@@ -14,12 +24,12 @@ var count = 0;
                 fname:{
                     required:true,
                     maxlength: 100,
-                    alphanumeric:true
+                    lettersOnly: true
                 },
                 lname:{
                     required:true,
                     maxlength: 100,
-                    alphanumeric:true
+                    lettersOnly: true
                 },
                 date:{
                     required:true,
@@ -32,11 +42,13 @@ var count = 0;
             messages:{
                 fname:{
                     required:"Le nom est obligatoire",
-                    maxlength : "Le nom ne peut pas être plus long que..."
+                    maxlength : "Le nom ne peut pas être plus long que...",
+                    lettersOnly: "Lettres autorisées uniquement"
                 },
                 lname:{
                     required:"Le prénom est obligatoire",
-                    maxlength : "Le prénom ne peut pas être plus long que..."
+                    maxlength : "Le prénom ne peut pas être plus long que...",
+                    lettersOnly: "Lettres autorisées uniquement"
                 },
                 date:{
                     required:"Le date est requise"
@@ -46,15 +58,16 @@ var count = 0;
                 }
             },
             submitHandler: function () {
-                
+               $('#start_page').show();
+                $('#formulaire').hide();
             }, 
             showErrors: function (errorMap, errorList) {
                 if (estSoumis) {
-                    const ul = $("<ul></ul>");
+                    const ol = $("<ol></ol>");
                     $.each(errorList, function () {
-                    ul.append(`<li>${this.message}</li>`);
+                    ol.append(`<li>${this.message}</li>`);
                     });
-                    $('#afficherErreurs').html(ul)
+                    $('#afficherErreurs').html(ol)
                     estSoumis = false;
                 }
                 this.defaultShowErrors();
@@ -64,6 +77,11 @@ var count = 0;
                 
             },
         }
+    );
+    $.validator.addMethod("lettersOnly", function(value, element) {
+        return this.optional(element) || /^[a-z]+$/i.test(value);
+    },
+    "Lettres uniquement"
     );
 
     $.validator.addMethod(
@@ -78,7 +96,7 @@ var count = 0;
 
 //.................................... Quizz ..........................................
 
-$(document).ready(function () {
+
 
     $('#acceder').click(function(){
         // calcul de l'age avant d'envoyer au localstorage
@@ -96,16 +114,7 @@ $(document).ready(function () {
         localStorage.setItem('prenom', $('#lname').val());
         localStorage.setItem('age', age);
         localStorage.setItem('statut', $('#statut').val());
-        localStorage.setItem('date', $('#date').val());
-
-        
-        /* // envoi de l'age au localstorage
-        localStorage.setItem('age', age);
-        // sauvegarder les données du formulaire dans le local storage
-        localStorage.setItem('fname', $('#fname').val());
-        localStorage.setItem('lname', $('#lname').val());
-        /* localStorage.setItem('date', $('#date').val());
-        localStorage.setItem('statut', $('#statut').val()); */ 
+        localStorage.setItem('date', $('#date').val()); 
         
     });
 
@@ -134,6 +143,9 @@ $(document).ready(function () {
         $('#options3').html(data[i].option3);
         $('#options4').html(data[i].option4);
         $('#number').html(Number(i+1));
+        // incrementer la barre de progression bootsrap de 20% à chaque question
+        $('.progress-bar').css('width', `${(count+1)*20}%`);
+        $('#progression').html(`${(count+1)*20}%`);
     }
 
     // fonction pour afficher les réponses
@@ -149,26 +161,74 @@ $(document).ready(function () {
         }
     }
 
+   
+
     // function pour afficher les résultats
     function afficherResultat(data){
+           
+        
         // Bonnes réponses
         for (let i = 0; i < answer.length; i++){
             if (answer[i] === data.Questions[i].answer) {
                 marque += 2;
-                $('#goodResponse').append(`<p>${data.Questions[i].question}</p>`);
-                $('#goodResponse').append(`<p class="text-success">${data.Questions[i].answer}</p>`);
-                
-            } 
-        }
-        // Mauvaises réponses avec correction
-        for (let i = 0; i < answer.length; i++){
-            if (answer[i] !== data.Questions[i].answer) {
-                $('#badResponse').append(`<p>${data.Questions[i].question}</p>`);
-                $('#badResponse').append(`<p class="text-danger">${answer[i]}</p>`);
-                $('#badResponse').append(`<p>Correction : <span class="text-success">${data.Questions[i].answer}</span></p>`);    
+        // mettre les questions et reponses dans un accordeon 
+                $('#accordion').append(`<div class="card">
+                <div class="card-header" id="heading${i}">
+                    <h6 class="mb-0">
+                        <button class="btn btn-link btn-block text-left text-decoration-none text-dark font-weight-bold" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="true" aria-controls="collapse${i}">
+                        <p>${data.Questions[i].question}</p>
+                        </button>
+                    </h6>
+                </div>
+                <div id="collapse${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#accordion">
+                    <div class="card-body">
+                    <p class="text-success">${data.Questions[i].answer}</p>
+                    </div>
+                </div>
+            </div>`);
+            // mettre les questions et reponses dans un tableau
+            $('#myTable').append(`
+                <tbody>        
+                    <tr>
+                        <td class="text-white">${i+1}</td>
+                        <td class="text-white">${data.Questions[i].question}</td>
+                        <td class="text-white">${data.Questions[i].answer}</td>
+                        <td class="text-success text-center w-25 ">&#10003</td>
+                    </tr>
+                </tbody>
+            `);
             }
+            else if (answer[i] !== data.Questions[i].answer) {
+                // mettre les questions et reponses dans un accordeon
+                $('#accordion').append(`<div class="card">
+                <div class="card-header" id="heading${i}">
+                    <h6 class="mb-0">
+                        <button class="btn btn-link btn-block text-left text-decoration-none text-dark font-weight-bold" type="button" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="true" aria-controls="collapse${i}">
+                        <p>${data.Questions[i].question}</p>
+                        </button>
+                    </h6>
+                </div>
+                <div id="collapse${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#accordion">
+                    <div class="card-body">
+                    <p class="text-danger">${answer[i]}</p>
+                    <p class="text-dark">Correction : <span class="text-success">${data.Questions[i].answer}</span></p>
+                    </div>
+                </div>
+            </div>`);
+            // mettre les questions et reponses dans un tableau
+            $('#myTable').append(`
+                <tbody>                    
+                    <tr>
+                        <td class="text-white">${i+1}</td>
+                        <td class="text-white">${data.Questions[i].question}</td>
+                        <td class="text-white">${answer[i]}</td>
+                        <td class="text-white">${data.Questions[i].answer}</td>
+                    </tr>
+                </tbody>     
+            `);
+            }
+            
         }
-        /* $('quizz').hide(); */
         $("#marque").text(marque);
         $("#correct-answer").text(Number(marque) / 2);
         $('#percentage').text((Number(marque) / 10) * 100) + "%";
@@ -183,9 +243,11 @@ $(document).ready(function () {
         $('#btn').click(function(){
             $('#options').show();
             afficherQuestion(data.Questions,count);
-            /* $('#start_page').hide(); */
+            $('#quizz').show();
+            $('#start_page').hide(); 
             $('#next').show();
             $('#prev').hide();
+            $('#finish').hide();
         });
     
 
@@ -223,20 +285,33 @@ $(document).ready(function () {
             selectedAnswer();
         });
 
-        // Fin du quizz
+        // Intégration d'un tableau de résultat
+        $('#myTable').DataTable();
 
+        // Fin du quizz
         $("#finish").click(function () {
             if (count > answer.length - 1) {
                 alert("Vous devez sélectionner au moins 1 réponse");
+                $('#finish').show();
             }
             else {
                 // afficher les données du formulaire dans la div info
-                $('#nom').append(`${localStorage.getItem('fname')}`);
-                $('#prenom').append(`${localStorage.getItem('lname')}`);
+                $('#nom').append(`${localStorage.getItem('nom')}`);
+                $('#prenom').append(`${localStorage.getItem('prenom')}`);
                 $('#age').append(`${localStorage.getItem('age')}`);
                 $('#etat').append(`${localStorage.getItem('statut')}`);
-        
+
+                
+                $('#quizz').hide();
                 $('#result').show();
+                $('#accordion').show();
+                $('#dialog').show();
+                $('#myTable').show();
+                $('#info').show();
+                $('.fin').show();
+                
+                
+
                 afficherResultat(data);
                 if (marque > 7) {
                     // alerte bootstrap de succès
@@ -255,7 +330,10 @@ $(document).ready(function () {
                     <p>Vous n'avez pas réussi le quizz !</p>    
                     </div>`);
                 }
+                $( "#accordion" ).accordion();
+                $( "#dialog" ).dialog();   
             }
+            
         });
     });
 
